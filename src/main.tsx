@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { combinedIn, combinedOut, expandIn, fadeIn, fadeOut, scaleIn, scaleOut, shrinkOut, slideIn, slideInHorizontally, slideInVertically, slideOut, slideOutHorizontally, slideOutVertically } from './effects/effects';
 import AnimatedContent from './components/content/AnimatedContent';
 import useContentKey from './hooks/useContentKey';
+import Easing from './core/easing/Easing';
 
 createRoot(document.getElementById('root')!).render(
   <div>
@@ -23,10 +24,8 @@ function Test() {
   const scaleOutAnimation = scaleOut(500, 0);
 
   const [count, setCount] = useState(1);
-  const [prevCount, setPrevCount] = useState(0);
 
   const handleChange = (newCount: number) => {
-    setPrevCount(count); // مقدار قبلی را ذخیره می‌کنیم
     setCount(newCount);
   };
 
@@ -42,18 +41,7 @@ function Test() {
   const slideOutAnimation = combinedOut([slideOut(100, 0, 500), fadeOut(500, 0)]);
 
   const expandInAnimation = expandIn(100, 100, 500);
-  const shrinkOutAnimation = shrinkOut(0, 0, 500);
-  const [key, setKey] = useState("1");
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setKey((prevKey) => (parseInt(prevKey) + 1).toString());
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const enterAnimation = combinedIn([slideInHorizontally(20), fadeIn()])
-  const exitAnimation = combinedOut([slideOutHorizontally(-20), fadeOut()])
+  const shrinkOutAnimation = shrinkOut(0, 0, 500, Easing.Linear);
 
 
   return (
@@ -78,10 +66,10 @@ function Test() {
 
       <div className="flex gap-4">
         <button onClick={() => handleChange(count + 1)}>
-          بالا ↑
+          up ↑
         </button>
         <button onClick={() => handleChange(count - 1)}>
-          پایین ↓
+          down↓
         </button>
       </div>
 
