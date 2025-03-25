@@ -1,6 +1,7 @@
 import React from "react";
 
 export default interface EnterAnimationEffect {
-    style: React.CSSProperties,
+    initialStyle: React.CSSProperties,
+    targetStyle: React.CSSProperties,
     duration: number
 }
