@@ -7,12 +7,20 @@ export class SlideIn implements EnterAnimationEffect {
     targetStyle: React.CSSProperties;
     duration: number;
 
-    constructor(x: number = 0, y: number = 0, duration: number = 500, easing: Easing = Easing.EnterDefault) {
+    constructor(
+        xPercentage: number = 0,
+        yPercentage: number = 0,
+        duration: number = 500,
+        easing: Easing = Easing.EnterDefault
+    ) {
         this.duration = duration;
 
-        this.initialStyle = { transform: `translate(${x}px, ${y}px)` };
+        this.initialStyle = { 
+            transform: `translate(${xPercentage}%, ${yPercentage}%)`
+        };
+
         this.targetStyle = {
-            transform: "translate(0, 0)",
+            transform: "translate(0%, 0%)", 
             transition: `transform ${duration}ms ${easing.toString()}`,
         };
     }
