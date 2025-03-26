@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import AnimatedVisibilityProps from "../props/AnimatedVisibilityProps";
+import AnimatedVisibilityProps from "../../props/AnimatedVisibilityProps";
 
 /**
  * Handles visibility transitions with animations. 
@@ -8,28 +8,38 @@ import AnimatedVisibilityProps from "../props/AnimatedVisibilityProps";
  */
 const AnimatedVisibility: React.FC<AnimatedVisibilityProps> = ({ enter, exit, children, visible, className = "" }) => {
     const ref = useRef<HTMLDivElement | null>(null);
+    const onceDisplay = useRef(visible ? "block" : "none")
 
     useEffect(() => {
         const element = ref.current;
         if (!element) return;
-
         if (visible) {
             Object.assign(element.style, enter.initialStyle);
             element.style.visibility = "visible";
+            element.style.display = "block";
             requestAnimationFrame(() => {
                 Object.assign(element.style, enter.targetStyle);
+                const advancedStyles: ((element: HTMLElement) => void)[] = enter.getAdvancedTargetStyles?.() ?? [];
+                advancedStyles.forEach((callback: (element: HTMLElement) => void) => {
+                    callback(element);
+                });
             });
         } else {
             Object.assign(element.style, exit.style);
             const timeoutId = setTimeout(() => {
-                if (!visible) element.style.visibility = "hidden";
-            }, exit.duration);
+                if (!visible) {
+                    element.style.visibility = "hidden"
+                    element.style.display = "none"
+                };
+            }, exit.duration + 1);
             return () => clearTimeout(timeoutId);
         }
     }, [visible, enter, exit]);
 
     return (
-        <div ref={ref} style={{ visibility: "hidden" }} className={className}>
+        <div ref={ref} style={{
+            visibility: "hidden", display: onceDisplay.current
+        }} className={className}>
             {children}
         </div>
     );

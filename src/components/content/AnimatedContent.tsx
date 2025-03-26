@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import AnimatedContentProps from "../../props/AnimatedContentProps";
 import AnimatedContentItem from "./AnimatedContentItem";
 
@@ -12,24 +12,14 @@ const AnimatedContent = <T,>({
 }: AnimatedContentProps<T>) => {
     const [animationList, setAnimationList] = useState<T[]>([]);
     const containerRef = useRef<HTMLDivElement>(null);
-    const lastItemRef = useRef<HTMLDivElement>(null);
 
 
     useEffect(() => {
         setAnimationList(prevList => [...prevList, currentKey]);
     }, [currentKey]);
 
-    useEffect(() => {
-        const container = containerRef.current
-        if (!container) return
-        requestAnimationFrame(() => {
-            if (lastItemRef.current) {
-                const boundSize = lastItemRef.current.getBoundingClientRect()
-                container.style.height = `${boundSize.height}px`;
-                container.style.width = `${boundSize.width}px`;
-            }
-        })
-    }, [currentKey]);
+
+
 
 
 
@@ -37,14 +27,24 @@ const AnimatedContent = <T,>({
         setAnimationList(prevList => prevList.filter(key => key !== itemKey));
     };
 
+    const updateSize = (boundSize: DOMRect) => {
+        const container = containerRef.current;
+        if (!container) return;
+        console.log(boundSize)
+        container.style.height = `${boundSize.height}px`;
+        container.style.width = `${boundSize.width}px`;
+    };
+
     const renderContent = () => {
         return animationList.map((animationKey, index) => {
             const isLast = index === animationList.length - 1;
             const prevKey = index > 0 ? animationList[index - 1] : currentKey;
 
+
+
             return (
                 <AnimatedContentItem
-                    ref={isLast ? lastItemRef : null}
+                    onUpdateSize={updateSize}
                     key={animationKey as any}
                     itemKey={animationKey as any}
                     enter={enter(prevKey, animationKey)}
@@ -65,7 +65,7 @@ const AnimatedContent = <T,>({
             style={{
                 display: "inline-block",
                 position: "relative",
-                transition: "width 0.5s ease-in-out, height 0.5s ease-in-out",
+                transition: "width 0.2s ease-in-out, height 0.2s ease-in-out",
             }}
         >
             {renderContent()}

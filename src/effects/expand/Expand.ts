@@ -7,34 +7,37 @@ export class Expand implements EnterAnimationEffect {
     targetStyle: React.CSSProperties;
     duration: number;
 
-    constructor(
-        widthPercentage: number = 0,
-        heightPercentage: number = 0,
-        duration: number = 500,
-        easing: Easing = Easing.EnterDefault
-    ) {
+    constructor(width: number = 0, height: number = 0, duration: number = 500, easing: Easing = Easing.EnterDefault) {
         this.duration = duration;
 
         this.initialStyle = {
             overflow: "hidden",
-            width: "0px",
-            height: "0px",
+            maxWidth: `${width}px`,
+            maxHeight: `${height}px`,
             display: "block",
-            transition: `
-                width ${duration}ms ${easing.toString()},
-                height ${duration}ms ${easing.toString()}
-            `,
-            willChange: "width, height",
+            transition: `max-width ${duration}ms ${easing.toString()}, max-height ${duration}ms ${easing.toString()}`,
+            willChange: "max-width, max-height",
         };
 
         this.targetStyle = {
             overflow: "hidden",
-            width: "auto",
-            height: "auto",
-            transition: `
-                width ${duration}ms ${easing.toString()},
-                height ${duration}ms ${easing.toString()}
-            `,
+            transition: `max-width ${duration}ms ${easing.toString()}, max-height ${duration}ms ${easing.toString()}`,
+            willChange: "max-width, max-height",
         };
+    }
+
+    // Function to apply the correct size to the element
+    applySize(element: HTMLElement) {
+        requestAnimationFrame(() => {
+            const width = `${element.scrollWidth}px`;
+            const height = `${element.scrollHeight}px`;
+
+            element.style.maxWidth = width;
+            element.style.maxHeight = height;
+        });
+    }
+
+    getAdvancedTargetStyles(): ((element: HTMLElement) => void)[] {
+        return [(element) => this.applySize(element)];
     }
 }

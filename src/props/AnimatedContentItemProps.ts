@@ -6,6 +6,7 @@ export default interface AnimatedContentItemProps {
     enter: EnterAnimationEffect;
     exit: ExitAnimationEffect;
     onEnd: () => void;
+    onUpdateSize: (rect: DOMRect) => void;
     itemKey: any;
     isLast: boolean;
     children: React.ReactNode

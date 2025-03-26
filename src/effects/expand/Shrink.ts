@@ -7,18 +7,19 @@ export class Shrink implements ExitAnimationEffect {
     duration: number;
 
     constructor(
-        targetWidthPercentage: number = 0,
-        targetHeightPercentage: number = 0,
+        targetWidth: number = 0,
+        targetHeight: number = 0,
         duration: number = 500,
         easing: Easing = Easing.ExitDefault
     ) {
         this.duration = duration;
 
         this.style = {
-            maxWidth: `${targetWidthPercentage}%`,
-            maxHeight: `${targetHeightPercentage}%`,
+            maxWidth: `${targetWidth}px`,
+            maxHeight: `${targetHeight}px`,
             transition: `max-width ${duration}ms ${easing.toString()}, max-height ${duration}ms ${easing.toString()}`,
             overflow: "hidden",
+            willChange: "max-width, max-height",
         };
     }
 }
