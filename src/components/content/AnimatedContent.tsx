@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AnimatedContentProps from "../../props/AnimatedContentProps";
 import AnimatedContentItem from "./AnimatedContentItem";
 
