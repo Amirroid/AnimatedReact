@@ -15,10 +15,9 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/c-forms.es.js",
-      "require": "./dist/c-forms.umd.js"
-    },
-    "./dist/index.d.ts": "./dist/index.d.ts"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
   },
   "files": [
     "dist"
